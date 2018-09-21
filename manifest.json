@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Chatwork Recipient Group Manager",
+  "version": "1.0",
+  "description" : "",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.chatwork.com/*",
+        "https://kcw.kddi.ne.jp/*"
+      ],
+      "run_at": "document_end",
+      "js": ["contentScript.js"]
+    }
+  ]
+}
