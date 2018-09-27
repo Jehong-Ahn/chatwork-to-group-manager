@@ -199,10 +199,15 @@ const PresetManager = ()=>{
   return { render };
 };
 
-// 방번호가 바뀔때마다 다시 렌더해야 한다.
+
 setTimeout(() => {
+
   window.presetManager = PresetManager();
-  window.presetManager.render(
-      document.location.href.split("!rid")[1]
-  );
+
+  window.presetManager.render(document.location.href.split("!rid")[1]);
+
+  window.onpopstate = () => {
+    window.presetManager.render(document.location.href.split("!rid")[1]);
+  };
+  
 }, 5000);
