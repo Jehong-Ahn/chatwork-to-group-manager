@@ -10,16 +10,10 @@ const PresetManager = ()=>{
   let chat = document.getElementById("_chatText");
   let room;
 
-  let data = {
-      '57467026': [
-          [ "1", "프리셋1", [ "2030037", "2095520", "2100306", "1954882", "351335" ] ],
-          [ "2", "프리셋2", [ "2030037", "2095520", "2100306" ] ],
-          [ "3", "프리셋3", [ "2030037", "2095520", "2100306" ] ],
-          [ "4", "프리셋4", [ "2030037", "2095520", "2100306" ] ],
-          [ "5", "프리셋5", [ "2030037", "2095520", "2100306" ] ],
-          [ "6", "프리셋6", [ "2030037", "2095520", "2100306" ] ],
-      ]
-  };
+  let data = {};
+  chrome.storage.local.get(['data'], (res) => {
+      data = res.data || {};
+  });
 
   let container = document.createElement("div");
   container.id = "_presetList";
@@ -78,6 +72,7 @@ const PresetManager = ()=>{
           name,
           array
       ];
+      console.log(data);
       data[room].push(row);
       let item = renderItem(row);
       list.appendChild(item);
@@ -148,7 +143,8 @@ const PresetManager = ()=>{
       toBtn.click();
 
       if (!data[roomNo] || !data[roomNo].length) {
-          return console.log('no preset data');
+          data[roomNo] = [];
+          return console.log('no preset data', data);
       }
 
       var f = document.createDocumentFragment();
@@ -193,10 +189,10 @@ const PresetManager = ()=>{
   };
 
   const save = () => {
-      return true;
+      return chrome.storage.local.set({data});
   };
 
-  return { render };
+  return { data, render };
 };
 
 
