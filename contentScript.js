@@ -1,4 +1,4 @@
-const PresetManager = ()=>{
+const PresetManager = (data) => {
 
   if (document.getElementById("_presetList")) 
     document.getElementById("_presetList").remove();
@@ -9,11 +9,6 @@ const PresetManager = ()=>{
   let members = memberList.getElementsByTagName("li");
   let chat = document.getElementById("_chatText");
   let room;
-
-  let data = {};
-  chrome.storage.local.get(['data'], (res) => {
-    data = res.data || {};
-  });
 
   let container = document.createElement("div");
   container.id = "_presetList";
@@ -198,12 +193,16 @@ const PresetManager = ()=>{
 
 setTimeout(() => {
 
-  window.presetManager = PresetManager();
+  chrome.storage.local.get(['data'], res => {
+    
+    window.presetManager = PresetManager(res.data || {});
 
-  window.presetManager.render(document.location.href.split("!rid")[1]);
-
-  window.onpopstate = () => {
     window.presetManager.render(document.location.href.split("!rid")[1]);
-  };
-  
+
+    window.onpopstate = () => {
+      window.presetManager.render(document.location.href.split("!rid")[1]);
+    };
+
+  });
+
 }, 5000);
