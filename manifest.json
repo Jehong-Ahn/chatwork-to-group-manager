@@ -10,6 +10,9 @@
         "https://www.chatwork.com/*",
         "https://kcw.kddi.ne.jp/*"
       ],
+      "include_globs": [
+        "*/#!rid*"
+      ],
       "run_at": "document_end",
       "js": ["contentScript.js"]
     }
