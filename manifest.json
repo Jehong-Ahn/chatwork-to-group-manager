@@ -3,6 +3,7 @@
   "name": "Chatwork Recipient Group Manager",
   "version": "1.0",
   "description" : "",
+  "icons": { "128": "icon.png" },
   "content_scripts": [
     {
       "matches": [
