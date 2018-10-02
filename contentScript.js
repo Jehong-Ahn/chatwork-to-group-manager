@@ -9,6 +9,7 @@ const PresetManager = (data) => {
   let members = memberList.getElementsByTagName("li");
   let chat = document.getElementById("_chatText");
   let room;
+  let rendered = false; // Is the list rendered for the current room?
 
   let container = document.createElement("div");
   container.id = "_presetList";
@@ -130,20 +131,17 @@ const PresetManager = (data) => {
   };
 
   const render = (roomNo) => {
-    
-    console.log("Start to render");
     room = roomNo;
-    reset();
-    toBtn.click();
-    toBtn.click();
+    console.log(`render for ${room}`);
+    rendered = true;
 
-    if (!data[roomNo] || !data[roomNo].length) {
-      data[roomNo] = [];
+    if (!data[room] || !data[room].length) {
+      data[room] = [];
       return console.log('no preset data', data);
     }
 
     var f = document.createDocumentFragment();
-    data[roomNo].forEach((row, i)=>{
+    data[room].forEach((row, i)=>{
       f.appendChild(renderItem(row, i));
     });
     list.appendChild(f);
@@ -178,6 +176,7 @@ const PresetManager = (data) => {
 
   const reset = () => {
     console.log('reset');
+    rendered = false;
     while (list.lastChild) {
       list.removeChild(list.lastChild);
     }
@@ -187,7 +186,18 @@ const PresetManager = (data) => {
     return chrome.storage.local.set({data});
   };
 
-  return { data, render };
+  const getRoomId = () => document.location.href.split("!rid")[1];
+
+
+  toBtn.addEventListener("click", () => {
+    if (rendered) return;
+    render(getRoomId());
+  });
+
+
+  console.log("init");
+
+  return { render, reset };
 };
 
 
@@ -195,13 +205,9 @@ setTimeout(() => {
 
   chrome.storage.local.get(['data'], res => {
     
-    window.presetManager = PresetManager(res.data || {});
+    window.pm = PresetManager(res.data || {});
 
-    window.presetManager.render(document.location.href.split("!rid")[1]);
-
-    window.onpopstate = () => {
-      window.presetManager.render(document.location.href.split("!rid")[1]);
-    };
+    window.onpopstate = () => window.pm.reset();
 
   });
 
