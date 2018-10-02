@@ -44,40 +44,6 @@ const PresetManager = (data) => {
   form.appendChild(inputName);
   let btnAdd = document.createElement("button");
   btnAdd.textContent = "Add";
-  btnAdd.addEventListener("click", async () => {
-      
-    let content = chat.value.trim();
-    if (!content) {
-      memberList.style.backgroundColor = "yellow";
-      setTimeout(() => {
-        memberList.style.backgroundColor = "inherit";
-      }, 1000);
-      return false;
-    }
-
-    let name = inputName.value.trim();
-    if (!name) return inputName.focus();
-
-    let array = content.split("\n")
-      .filter(line=>line.substr(0,4)==="[To:")
-      .map(line=>/To:(\d+)/.exec(line)[1]);
-    if (!array.length) return false;
-
-    let row = [
-      Date.now().toString(),
-      name,
-      array
-    ];
-    console.log(data);
-    data[room].push(row);
-    let item = renderItem(row);
-    list.appendChild(item);
-    console.log("data", data);
-    await save();
-
-    inputName.value = "";
-    item.scrollIntoView();
-  });
   form.appendChild(btnAdd);
   
   header.appendChild(form);
@@ -194,10 +160,46 @@ const PresetManager = (data) => {
     render(getRoomId());
   });
 
+  btnAdd.addEventListener("click", async () => {
+      
+    let content = chat.value.trim();
+    if (!content) {
+      memberList.style.backgroundColor = "yellow";
+      setTimeout(() => {
+        memberList.style.backgroundColor = "inherit";
+      }, 1000);
+      return false;
+    }
+
+    let name = inputName.value.trim();
+    if (!name) return inputName.focus();
+
+    let array = content.split("\n")
+      .filter(line=>line.substr(0,4)==="[To:")
+      .map(line=>/To:(\d+)/.exec(line)[1]);
+    if (!array.length) return false;
+
+    let row = [
+      Date.now().toString(),
+      name,
+      array
+    ];
+    
+    let item = renderItem(row);
+    list.appendChild(item);
+    
+    data[room].push(row);
+    console.log("data", data);
+    await save();
+
+    inputName.value = "";
+    item.scrollIntoView();
+  });
+
 
   console.log("init");
 
-  return { render, reset };
+  return { data, render, reset };
 };
 
 
