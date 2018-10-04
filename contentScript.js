@@ -71,7 +71,7 @@ const PresetManager = (data) => {
 
     let avatars = document.createElement("div");
     avatars.className = "avatars autotrim";
-    avatars.style = "display: inline-block; width: 73px; margin-right: 5px;";
+    avatars.style = "display: inline-block; width: 79px; margin-right: 5px;";
     item.appendChild(avatars);
 
     copyAvatar(row[2], avatars);
@@ -125,11 +125,31 @@ const PresetManager = (data) => {
   }
 
   const copyAvatar = (users, item) => {
-    _eachMember(users.slice(0, 3), (mid, m)=>{
+    
+    let needOmit = users.length > 3;
+    let sliced = users.slice(0, (needOmit ? 2 : 3));
+    
+    _eachMember(sliced, (mid, m)=>{
       let img = m.getElementsByTagName("img")[0].cloneNode(true);
       img.style = `width: 20px; height: 20px; image-rendering: pixelated;`;
-      item.appendChild(img);            
+      item.appendChild(img);
     });
+
+    if (needOmit) {
+      let omitted = document.createElement("div");
+      omitted.style = `
+        display: inline-block;
+        background-color: #b3b3b3;
+        color: white;
+        border-radius: 10px;
+        padding: 0 3px;
+        position: relative;
+        top: 2px;
+      `;
+      omitted.textContent = "+" + (users.length - 2);
+      item.appendChild(omitted);
+    }
+
   };
 
   const generateMessage = users => {
