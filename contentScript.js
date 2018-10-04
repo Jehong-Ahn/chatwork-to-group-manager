@@ -118,14 +118,14 @@ const PresetManager = (data) => {
     for(let i=0; i<members.length; i++) {
       let m = members[i];
       let mid = m.getAttribute("data-cwui-lt-value");
-      if (users.slice(0, 3).indexOf(mid)>-1) {
+      if (users.indexOf(mid)>-1) {
         callback(mid, m);
       }
     }
   }
 
   const copyAvatar = (users, item) => {
-    _eachMember(users, (mid, m)=>{
+    _eachMember(users.slice(0, 3), (mid, m)=>{
       let img = m.getElementsByTagName("img")[0].cloneNode(true);
       img.style = `width: 20px; height: 20px; image-rendering: pixelated;`;
       item.appendChild(img);            
