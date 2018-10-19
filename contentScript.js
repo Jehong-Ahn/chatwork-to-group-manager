@@ -58,7 +58,7 @@ const PresetManager = (data) => {
     item.setAttribute("key", row[0]);
     item.addEventListener("click", (e)=>{
       if (e.target.nodeName==="BUTTON") return false;
-      chat.value = generateMessage(row[2]) + "\n";
+      chat.value = ( row[3] || generateMessage(row[2]) ) + "\n";
       toBtn.click();
       chat.focus();
     });
@@ -202,7 +202,8 @@ const PresetManager = (data) => {
     let row = [
       Date.now().toString(),
       name,
-      array
+      array,
+      content
     ];
     
     let item = renderItem(row);
